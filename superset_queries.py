@@ -141,16 +141,6 @@ def generate_superset_table_columns_query(dir:str , file_name: str, table_id, ):
 
     return(query)
 
-    
-
-
-def get_db_conn():
-    # Connect to your postgres DB
-    conn = psycopg2.connect(
-          
-    )
-    return conn
-
 
 
 def infer_data_types(col):
