@@ -11,7 +11,7 @@ host="127.0.0.1"        # host
 port=5432               # postgres port ( usually 5432 )
 user="superset"         # your username
 password="superset"     # your password
-target_db="examples"    # db on wich upload dataset (you must create the db in superset first)
+target_db="examples"    # db on wich upload dataset (you must create the db in superset first) (if you don't have a target db leave it blank)
 superset_db="superset"  # the defalut superset db in wich superset store all metadata
 
 
