@@ -1,32 +1,37 @@
-# global var
-csv_ext = '.csv'
-output_dir = '/home/mirco/engineering/energidrica/elaboration/output'  
+# local folder for your csv
+csv_dir = '/home/mirco/engineering/energidrica/elaboration/output'  
+# csv_dir = 'path/to/your/local/folder'  
 
-# if a table is already in db  will delete the table and replace it
-drop_table_if_exists = True
+# the dataset name is created with the file name.
+# if a dataset with same name is already in db will delete the table and replace it
+replace_table_if_exists = True
 
-# superset db configurations
+# postgres superset db configurations
 host="127.0.0.1"        # host 
-port=5432               # postgre port ( usually 5432 )
-user="superset"         # username
-password="superset"     # password
-default_db="examples"   # db on wich upload dataset
-default_db_id=2         # id db 
-superset_db="superset"  # the defalut superset db
-seuperset_db_id=1       # the id of superset db
+port=5432               # postgres port ( usually 5432 )
+user="superset"         # your username
+password="superset"     # your password
+target_db="examples"    # db on wich upload dataset (you must create the db in superset first)
+superset_db="superset"  # the defalut superset db in wich superset store all metadata
 
+
+
+# IF YOU DON'T NEED A PARTICULAR CONFIGURATION FOR YOUR CSV SKIP THIS PART AND LEAVE AS IT IS
+# if you have to configure some particular columns for your csv edit the fields you need 
+# for example if you need a column that represent time ecc ...  
 
 # TABLES
 # this conf are for the table 'tables' in superset that describe the new created table for a specific dataset
-def get_superset_tables_conf(table_name:str, database_id, database_name:str, uuid:str):
+# if you need a specific cnfigurations for your table edit the static fields based on your need
+def get_superset_tables_conf(table_name:str, database_id, table_id:str, uuid:str):
     
     # defalut values 
     row_values = {
-        "created_on": 'now()',
+        "created_on": 'now()',                              
         "changed_on": 'now()',
         "table_name": "'" + table_name +"'",
-        "main_dttm_col": None,
-        "default_endpoint": None,
+        "main_dttm_col": None,              
+        "default_endpoint": None,               
         "database_id": str(database_id),
         "created_by_fk": 1,
         "changed_by_fk": 1,
@@ -37,7 +42,7 @@ def get_superset_tables_conf(table_name:str, database_id, database_name:str, uui
         "schema": None,
         "sql": None,
         "params": None,
-        "perm": "'[PostgreSQL].[" + table_name +"](id:" + str(database_id) +")'", # TODO : mettere il table id al posto del database id,
+        "perm": "'[PostgreSQL].[" + table_name +"](id:" + str(table_id) +")'", 
         "filter_select_enabled": 'false',
         "fetch_values_predicate": None,
         "is_sqllab_view": 'false',
@@ -75,6 +80,7 @@ superset_table_columns_cols = [
 
 # TBALE_COLUMNS
 # this conf are for the table table_columns in superset that describe each column for a specific dataset
+# if you need a specific cnfigurations for your columns edit the static fields based on your need
 def get_superset_table_columns_conf(table_id:int, column_name:str, data_type:str,uuid:str):
 
     # default values foreach row
@@ -101,3 +107,5 @@ def get_superset_table_columns_conf(table_id:int, column_name:str, data_type:str
     return default_values
 
 
+# global var (don't touch this)
+csv_ext = '.csv'

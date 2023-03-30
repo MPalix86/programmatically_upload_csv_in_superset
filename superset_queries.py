@@ -3,18 +3,9 @@ import uuid
 import psycopg2
 import configurations as conf
 
-'''
-per importare un dataset_csv in superset
-1)  creare una nuova tabella nel database scelto con i dati presi dal csv
-2)  inserire i dati nella tabella appena creata
-3)  inserire i campi richiesti nella tabella superset chiamata "tables" che descrive in generale la tabella appena creata
-4)  inserire i la descrizione di igni colonna della tabella appena creata nella tabella superset chiamata "table_columns".
-    va inserito un campo per ogni colonna !
-'''
 
 superset_tables = 'tables'
 superset_table_columns = 'table_columns'
-
 
 # check if table exists
 def table_exists_query(schema, table):
@@ -32,6 +23,8 @@ def delete_column_from_superset_tables(table_id):
 def delete_columns_from_superset_table_columns(table_id):
     return f"delete from {superset_table_columns} where table_id={table_id}"
 
+def get_database_info(database_name):
+    return  f"select * from dbs where database_name='{database_name}'"
 
 
 
@@ -92,11 +85,11 @@ def csv_insert_data_query(file_name: str, dir: str):
 
 
 # generate query for table 'tables' in superset this table describe the table you wanto to create
-def generate_superset_tables_query(table_name:str,database_id:int, database_name:str):
+def generate_superset_tables_query(table_name:str,database_id:int):
     
     superset_table = 'tables'
  
-    cols_dict = conf.get_superset_tables_conf(table_name,database_id,database_name,str(uuid.uuid4()))
+    cols_dict = conf.get_superset_tables_conf(table_name,database_id,database_id,str(uuid.uuid4()))
 
     columns_query = f'INSERT INTO {superset_table} (\n' 
     values_query = 'VALUES (\n';
