@@ -52,10 +52,8 @@ class Postgresconn:
             self.conn.commit()
             if cursor.description is not None:
                 last_insert_id = cursor.fetchone()[0]
-                print("Insert query executed successfully!")
                 return last_insert_id
             else:
-                print("Insert query executed successfully but no result returned")
                 return None
         except Exception as e:
             self.conn.rollback()
@@ -73,52 +71,47 @@ class Postgresconn:
             self.conn.rollback()
             print(f"Error while creating the table {e}" )
 
-    # QUERY FUNCTIONS WITHOUT EXCEPTION HANDLING, TO HANDLE ROLLBACK AND COMMIT EXTERNALLY 
-    # 
+    # QUERY FUNCTIONS WITHOUT EXCEPTION HANDLING, TO HANDLE ROLLBACK AND COMMIT EXTERNALLY
 
     def query_norb(self, query:str):
         cursor = self.conn.cursor()
         cursor.execute(query)
         if cursor.description is not None:
             last_insert_id = cursor.fetchone()[0]
-            print("Insert query executed successfully!")
             return last_insert_id
         else:
-            print("Insert query executed successfully but no result returned")
             return None
 
     def update_norb(self, query):
         cursor = self.conn.cursor()
         cursor.execute(query)
         cursor.close()
-        print("Update query executed successfully!")
+        
 
     def insert_norb(self, query:str):
         cursor = self.conn.cursor()
         cursor.execute(query)
         if cursor.description is not None:
             last_insert_id = cursor.fetchone()[0]
-            print("Insert query executed successfully!")
             return last_insert_id
         else:
-            print("Insert query executed successfully but no result returned")
             return None
+
 
     def create_norb(self, query:str):
         cursor = self.conn.cursor()
         cursor.execute(query)
         cursor.close()
-        print("Table created successfully!")
+
+
 
     def query_norb(self, query:str):
         cursor = self.conn.cursor()
         cursor.execute(query)
         if cursor.description is not None:
             last_insert_id = cursor.fetchone()[0]
-            print("Insert query executed successfully!")
             return last_insert_id
         else:
-            print("Insert query executed successfully but no result returned")
             return None
     
     def get_data_as_dict_norb(self,query):
