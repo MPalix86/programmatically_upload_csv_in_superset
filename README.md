@@ -1,5 +1,7 @@
 # programmatically_upload_csv_in_superset
 
+I'M DEVELOPING THE FRONTEND THAT IS INCOMPLETE JUST CLONE THE REPO AND FOLOW THE ISNSTRUCTION BELOW FOR THE BACKEND FOLDER
+
 A simple script in python that keeps all csv files in a specified folder and creates a dataset foreach csv in superset.
 This script is tested on superset **1.3.2**
 
