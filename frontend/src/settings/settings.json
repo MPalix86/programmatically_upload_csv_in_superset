@@ -1,0 +1,17 @@
+{
+  "generalSettings": {
+    "updateTableIfExists": true,
+    "recreateTableIfExists": false,
+    "useJsonModel": false,
+    "useSameJsonForAllCsv": false,
+    "deleteFilesAfterUpload": false
+  },
+  "dbSettings": {
+    "user": "superset",
+    "host": "127.0.0.1",
+    "port": 5432,
+    "password": "superset",
+    "targetDb": "example",
+    "realDb": "superset"
+  }
+}

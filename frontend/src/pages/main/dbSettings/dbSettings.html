@@ -1,0 +1,99 @@
+<!-- Form e prima row -->
+<div class="row p-3">
+
+  <!-- Prima colonna nella seconda row -->
+  <div id="postgre-settings" class="col-sm-5 border-end">
+
+
+
+    <div class="d-flex justify-content-center">
+      <h4><i class="bi bi-database"></i> Postgre Settings</h4>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <div class="input-group">
+        <label>Host
+          <input class="form-control form-control-sm" type="text" value="127.0.0.1" id="postgre-host">
+        </label>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <div class="input-group">
+        <label>Port
+          <input class="form-control form-control-sm" type="number" value="5432" id="postgre-port">
+        </label>
+      </div>
+    </div>
+
+
+    <div class="d-flex justify-content-center">
+      <div class="input-group">
+        <label>User
+          <input class="form-control form-control-sm" type="text" value="superset" id="postgre-user">
+        </label>
+      </div>
+    </div>
+
+
+    <div class="d-flex justify-content-center">
+      <div class="input-group">
+        <label>Password
+          <input class="form-control form-control-sm" value="superset" type="password" id="postgre-password">
+        </label>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <div class="input-group">
+        <label>Target DB
+          <input class="form-control form-control-sm" type="text" value="example" id="postgre-target-db">
+        </label>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Seconda colonna nella seconda row -->
+  <div class="col-sm-7 ">
+
+
+
+    <div class="d-flex justify-content-center">
+      <h4>Test Db Connection</h4>
+    </div>
+
+
+    <div class="d-flex justify-content-center">
+      <p>Verify inserted parameters before proceding</p>
+    </div>
+    <hr>
+
+
+
+    <div id="test-conn-logs" calss="col-sm-12" id="connection-test-content">
+
+
+
+    </div>
+
+
+
+
+
+    <div class="mt-auto d-flex  justify-content-center " style="padding-top:10px">
+      <button id="start-test-btn" type="button" class="btn btn-primary btn-sm">Test Connection</button>
+    </div>
+
+
+  </div>
+
+  <div class="next-back-btn-div col-md-12 col-lg-12 px-md-4">
+    <div class="col text-end ">
+      <button id="prev-page" type="button" class="btn btn-primary btn-sm"><i class="bi bi-arrow-left"></i></button>
+      <button id="next-page" type="button" class=" disabled btn btn-primary btn-sm"> Upload</button>
+    </div>
+  </div>
+  </body>
+
+</div>

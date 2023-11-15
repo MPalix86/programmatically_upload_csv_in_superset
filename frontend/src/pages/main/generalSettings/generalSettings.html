@@ -1,0 +1,90 @@
+<div class="row" id="settingsForm">
+
+  <h4><i class="bi bi-gear" style="color:#e6e7e7"></i> General Settings</h4>
+
+  <hr>
+
+  <!-- UPDATE TABLE IF EXISTS -->
+  <div class="form-check">
+    <p>
+      The dataset name is generated using the CSV file names. If a dataset with the same name already exists in the
+      database, the table will be updated without being deleted and recreated.
+      <strong>
+        This allows you to maintain all your charts that use the dataset.
+      </strong>
+      If the table does not exist, a new table will be created.
+    </p>
+    <input class="form-check-input" type="radio" name="updating-methods" id="update-table-if-exists">
+    <label class="form-check-label">
+      Update table if exists
+    </label>
+  </div>
+
+  <br>
+  <br>
+
+  <!-- RECREATE TABLE IF EXISTS -->
+  <div class="form-check">
+    <p>
+      If a dataset with the same name already exists in the database, the table will be deleted and a new table
+      will be created.
+      <strong>
+        This does not allow you to maintain all your charts that use the dataset.
+      </strong>
+      If the table does not exist, a new table will be created.
+    </p>
+    <input class="form-check-input" type="radio" name="updating-methods" id="recreate-table-if-exists" checked>
+    <label class="form-check-label">
+      Recreate table if exists
+    </label>
+  </div>
+
+  <hr>
+
+  <!-- USE JSON MODEL -->
+  <div class="form-check">
+    <p>
+      Use a JSON model that describes the CSV file you are using.
+      <strong>It's assumed the CSV model has the same name as the CSV file you're uploading.</strong>
+      So if you're uploading many different CSV files, each CSV must have the corresponding JSON model.
+      If the JSON model is not found, an automatic inference mode is activated to try to infer data types from the
+      CSV.
+    </p>
+    <input class="form-check-input" type="checkbox" id="use-json-model">
+    <label class="form-check-label">
+      Use JSON model
+    </label>
+
+    <!-- USE SAME JSON FOR ALL CSV -->
+    <div class="form-check">
+      <p>
+        use the same JSON file for each CSV.
+        (Enable use json model above if you wat to use this option)
+      </p>
+      <input class="form-check-input" type="checkbox" id="use-same-json-for-all-csv">
+      <label class="form-check-label">
+        Use the same JSON for all CSV files
+      </label>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- DELETE AFTER UPLOADS-->
+  <div class="form-check">
+    <p>
+      Delete files after upload <strong>All files will be deleted, including the JSON model files.</strong>
+    </p>
+    <input class="form-check-input" type="checkbox" value="" id="delete-files-after-upload">
+    <label class="form-check-label">
+      Delete files after upload
+    </label>
+  </div>
+
+  <div class=" next-back-btn-div col-md-12 col-lg-12 px-md-4">
+    <div class="col text-end next-back-btn-div ">
+      <button id="next-page" type="button" class="btn btn-primary btn-sm"><i class="bi bi-arrow-right"></i></button>
+    </div>
+  </div>
+
+</div>

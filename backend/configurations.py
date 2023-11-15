@@ -1,5 +1,5 @@
 
-# the dataset name is created with the file name.
+# the dataset name is created with the files names.
 # if a dataset with same name is already in db will update the table without deleting and recreating it
 update_table_if_exists = True
 

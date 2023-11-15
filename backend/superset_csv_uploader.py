@@ -159,16 +159,3 @@ def upload_csv_in_superset(csv_dir_path,use_model,model_dir_path = ''):
                 return 
 
 
-upload_csv_in_superset('./csv_test',use_model=True, model_dir_path="./csv_test/json_models")
-
-
-
-
-
-
-
-
-
-
-
-

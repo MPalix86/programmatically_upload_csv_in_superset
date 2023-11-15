@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script type="module" async src="paths.js"></script>
+  <script type="module" async src="session.js"></script>
+  <script type="module" async src="global.js"></script>
+
+
+  <script type="module" defer src="main.js"></script>
+  <title>Bootstrap 5 Fixed Sidebar</title>
+</head>
+
+<body>
+
+  <!-- Sidebar -->
+  <nav id="sidebar" class="col-md-2 d-md-block">
+    <div class="position-sticky">
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link active" href="#">
+            <i class="bi bi-airplane-engines-fill"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main content -->
+  <main id="dynamic-content" class="col-md-12 col-lg-12 px-md-4">
+    <div id="main-content">
+      <!-- Content will be loaded here -->
+    </div>
+  </main>
+</body>
+
+</html>
