@@ -8,11 +8,20 @@ class Paths {
   static generalSettingsDir;
   static generalSettingsHtml;
   static generalSettingsJs;
+  static commonsDir;
+  static htmlDir;
+  static customDialog;
 
   // prettier-ignore
   static async init() {
     const __dirname = await window.api.getDirname();
     this.pagesDir = `${__dirname}/pages`;
+
+    this.commonsDir = `${this.pagesDir}/commons`
+      this.htmlDir = `${this.commonsDir}/html`
+        this.customDialog = `${this.htmlDir}/customDialog.html`
+
+
     this.mainDir = `${this.pagesDir}/main`;
     this.mainHtml = `${this.mainDir}/main.html`;
 

@@ -77,8 +77,8 @@ button i {
 fieldset:disabled .btn {
   color: #f7f2f2;
   pointer-events: none;
-  background-color: #6bdfd3;
-  border-color: #6bdfd3;
+  background-color: #0f5b53;
+  border-color: #0f5b53;
 }
 
 .form-check-input:checked {
@@ -139,4 +139,14 @@ fieldset:disabled .btn {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #627b82;
+}
+
+.select-directory {
+  border-radius: 0px;
+}
+
+.directory-value {
+  color: 6c6c6cM;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
 }

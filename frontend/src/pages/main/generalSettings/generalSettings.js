@@ -1,5 +1,5 @@
 // prettier-ignore
-import { frontEndCommons, classes } from './global.js';
+import { frontEndCommons, classes } from '../commons/js/global.js';
 
 const Paths = classes.Paths;
 const Session = classes.Session;
@@ -9,21 +9,23 @@ const generalSettings = async function () {
 
   const useJsonModelCheckbox = document.querySelector('#use-json-model');
   const updateTableIfExistsInput = document.querySelector('#update-table-if-exists');
-  const recreateTableIfExistsInput = document.querySelector('#recreate-table-if-exists');
+  const replaceTableIfExistsInput = document.querySelector('#replace-table-if-exists');
   const deleteFilesAfterUploadCheckbox = document.querySelector('#delete-files-after-upload');
   const useSameJsonForAllCsvCheckbox = document.querySelector('#use-same-json-for-all-csv');
+  // const jsonFolderPathInput = document.querySelector('json-dir-path').chil
+  // const csvFolderPathInput = document.querySelector('csv-dir-path')
 
-  const generalSettings = Session.settings.generalSettings;
+
+  const settings = Session.settings;
   const nextPageBtn = document.querySelector('#next-page');
 
 
-
-    // settin up checkboxes
-  useJsonModelCheckbox.checked = generalSettings.useJsonModel
-  updateTableIfExistsInput.checked = generalSettings.updateTableIfExists
-  recreateTableIfExistsInput.checked = generalSettings.recreateTableIfExists
-  useSameJsonForAllCsvCheckbox.checked = generalSettings.useSameJsonForAllCsv
-  deleteFilesAfterUploadCheckbox.checked = generalSettings.deleteFilesAfterUpload
+  // settin up checkboxes
+  useJsonModelCheckbox.checked = settings.useJsonModel
+  updateTableIfExistsInput.checked = settings.updateTableIfExists
+  replaceTableIfExistsInput.checked = settings.replaceTableIfExists
+  useSameJsonForAllCsvCheckbox.checked = settings.useSameJsonForAllCsv
+  deleteFilesAfterUploadCheckbox.checked = settings.deleteFilesAfterUpload
 
   useSameJsonForAllCsvCheckbox.disabled = !useJsonModelCheckbox.checked
 
@@ -35,13 +37,11 @@ const generalSettings = async function () {
 
   // saveSettings 
   const saveSettings = function(){
-    generalSettings.useJsonModel = useJsonModelCheckbox.checked;
-    generalSettings.updateTableIfExists= updateTableIfExistsInput.checked;
-    generalSettings.recreateTableIfExists = recreateTableIfExistsInput.checked;
-    generalSettings.useSameJsonForAllCsv = useSameJsonForAllCsvCheckbox.checked;
-    generalSettings.deleteFilesAfterUpload = deleteFilesAfterUploadCheckbox.checked;
-
-    console.log(generalSettings)
+    settings.useJsonModel = useJsonModelCheckbox.checked;
+    settings.updateTableIfExists= updateTableIfExistsInput.checked;
+    settings.replaceTableIfExists = replaceTableIfExistsInput.checked;
+    settings.useSameJsonForAllCsv = useSameJsonForAllCsvCheckbox.checked;
+    settings.deleteFilesAfterUpload = deleteFilesAfterUploadCheckbox.checked;
   } 
 
 
@@ -50,6 +50,8 @@ const generalSettings = async function () {
     frontEndCommons.handleNextBtn(Paths.dbSettingsHtml, Paths.dbSettingsJs)
     saveSettings()
   });
+
+
 };
 
 generalSettings();

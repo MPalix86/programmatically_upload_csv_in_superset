@@ -1,9 +1,10 @@
 'use strict';
 
 // prettier-ignore
-import { frontEndCommons, classes } from './global.js';
+import { frontEndCommons, classes } from '../commons/js/global.js';
 
 const Session = classes.Session;
+const Paths = classes.Paths;
 
 // prettier-ignore
 const dbSettings = function () {
@@ -20,7 +21,6 @@ const dbSettings = function () {
 
   //  recovering settings
   const settings = Session.settings;
-  const dbSettings = settings.dbSettings;
 
   // setting up conection test div
   let height = postgreSettingsDiv.offsetHeight;
@@ -29,25 +29,25 @@ const dbSettings = function () {
   connLogsDiv.style.overflowY = 'auto'
 
   // populating inputs
-  postgreTargetDbEl.value = dbSettings.targetDb;
-  postgrePasswordEl.value = dbSettings.password;
-  postgreUserEl.value = dbSettings.user;
-  postgreHostEl.value = dbSettings.host;
-  postgrePortEl.value = dbSettings.port;
+  postgreTargetDbEl.value = settings.targetDb;
+  postgrePasswordEl.value = settings.password;
+  postgreUserEl.value = settings.user;
+  postgreHostEl.value = settings.host;
+  postgrePortEl.value = settings.port;
 
 
   // test connection function
   const testConnection = async function () {
 
     // recovering values 
-    dbSettings.port = postgrePortEl.value;
-    dbSettings.host = postgreHostEl.value;
-    dbSettings.user = postgreUserEl.value;
-    dbSettings.password = postgrePasswordEl.value;
-    dbSettings.targetDb = postgreTargetDbEl.value;
+    settings.port = postgrePortEl.value;
+    settings.host = postgreHostEl.value;
+    settings.user = postgreUserEl.value;
+    settings.password = postgrePasswordEl.value;
+    settings.targetDb = postgreTargetDbEl.value;
 
     // testing db connection
-    const testResult = await window.api.testDbConnection(dbSettings);
+    const testResult = await window.api.testDbConnection(settings);
 
     // log html element creation
     const createLogElement = function(classList,color ,text){
@@ -90,7 +90,7 @@ const dbSettings = function () {
   });
 
   nextBtn.addEventListener('click', function(){
-    frontEndCommons.handleNextBtn(classes.Paths.uploadCsvHtml,classes.uploadCsvJs)
+    frontEndCommons.handleNextBtn(Paths.uploadCsvHtml,Paths.uploadCsvJs)
   })
 
 

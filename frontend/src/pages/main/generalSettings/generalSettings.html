@@ -33,9 +33,9 @@
       </strong>
       If the table does not exist, a new table will be created.
     </p>
-    <input class="form-check-input" type="radio" name="updating-methods" id="recreate-table-if-exists" checked>
+    <input class="form-check-input" type="radio" name="updating-methods" id="replace-table-if-exists" checked>
     <label class="form-check-label">
-      Recreate table if exists
+      Replace table if exists
     </label>
   </div>
 
@@ -55,6 +55,15 @@
       Use JSON model
     </label>
 
+    <!-- 
+
+    <label>Select the folder containig the JSON files</label>
+    <div id="json-dir-path" class="col " style="display:flex; padding-bottom:10px">
+      <button class="select-directory btn btn-primary btn-sm"><i class="bi bi-folder2"></i></button>
+      <input placeholder="select fodler" readonly type="text" class=" form-control directory-value"> </input>
+    </div> -->
+
+
     <!-- USE SAME JSON FOR ALL CSV -->
     <div class="form-check">
       <p>
@@ -68,7 +77,8 @@
     </div>
   </div>
 
-  <hr>
+
+
 
   <!-- DELETE AFTER UPLOADS-->
   <div class="form-check">
@@ -81,10 +91,37 @@
     </label>
   </div>
 
+  <hr>
+
+  <!-- <div class="custom-dialog">
+    <label></label>
+    <div id="csv-dir-path" class="col custom-dialog" style="display:flex; padding-bottom:10px">
+      <button class="select-directory btn btn-primary btn-sm"><i class="bi bi-folder2"></i></button>
+      <input placeholder="select fodler" readonly type="text" class=" form-control directory-value"> </input>
+    </div>
+  </div> -->
+
+
+  <custom-dialog> </custom-dialog>
+
+
+  <custom-dialog> </custom-dialog>
+
+
+
+  <br>
+  <hr>
+
+
+
   <div class=" next-back-btn-div col-md-12 col-lg-12 px-md-4">
     <div class="col text-end next-back-btn-div ">
-      <button id="next-page" type="button" class="btn btn-primary btn-sm"><i class="bi bi-arrow-right"></i></button>
+      <button id="next-page" class="btn btn-primary btn-sm"><i class="bi bi-arrow-right"></i></button>
     </div>
   </div>
+
+
+
+
 
 </div>

@@ -1,0 +1,22 @@
+<div class="">
+  <label></label>
+  <div class="col custom-dialog" style="display:flex; padding-bottom:10px">
+    <button [test] class="select-directory btn btn-primary btn-sm"><i class="bi bi-folder2"></i></button>
+    <input placeholder="select fodler" readonly type="text" class=" form-control directory-value"> </input>
+  </div>
+</div>
+
+<script>
+  const customDialogs = document.querySelectorAll('.custom-dialog')
+  customDialogs.forEach(d => {
+    d.addEventListener('click', async function(event) {
+      console.log('click')
+      const button = event.target.closest('.select-directory');
+      if (button) {
+        const valueEL = button.parentNode.querySelector('.directory-value');
+        const path = await window.api.getDirDialog();
+        if (path) valueEL.value = path;
+      }
+    });
+  })
+</script>

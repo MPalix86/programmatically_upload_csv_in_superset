@@ -1,12 +1,9 @@
-import { frontEndCommons, classes } from './global.js';
+import { frontEndCommons, classes } from '../commons/js/global.js';
 
 const Paths = classes.Paths;
 
-const main = async function () {
-  frontEndCommons.handleNextBtn(
-    Paths.generalSettingsHtml,
-    Paths.generalSettingsJs
-  );
-};
+console.log(Paths);
+
+const main = async function () {};
 
 main();
