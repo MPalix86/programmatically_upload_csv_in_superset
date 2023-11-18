@@ -1,5 +1,7 @@
-from flask import Flask, jsonify
+from flask import Flask, request, jsonify
 import superset_csv_uploader as su
+import configurations as conf
+
 
 
 app = Flask('programmaticaly_upload_csv_in_superset')
@@ -14,9 +16,11 @@ def hello_world():
 
 
 
-@app.route('/upload_csv')
+@app.route('/upload_csv', methods=['POST'])
 def upload_csv():
-    pass
-    # su.upload_csv_in_superset('./csv_test',use_model=False)
+    data = request.get_json()
     
+
+    return su.test(data)
+
 app.run()

@@ -6,7 +6,48 @@ import configurations as conf
 
 
 # programmatically upload csv in superset
-def upload_csv_in_superset(csv_dir_path,use_model,model_dir_path = ''):
+def upload_csv_in_superset(csv_dir_path,use_model, use_same_model_for_all_csv = False , external_conf = None, model_dir_path = '', ):
+    
+    superset_db_name = ''
+    user = ''
+    password = ''
+    host = ''
+    port = 0
+    target_db = ''
+
+    update_table_if_exists = True
+    replace_table_if_exists = False
+    delete_files_after_upload = False
+        
+    # predisposition if you want to expose this as an api and call by external service
+    if(external_conf):
+        superset_db_name = external_conf['realDb']
+        user = external_conf['user']
+        password = external_conf['password']
+        host = external_conf['host']
+        port = external_conf['port']
+        update_table_if_exists = external_conf['updateTableIfExists']
+        replace_table_if_exists = external_conf['replaceTableIfExists']
+        delete_files_after_upload =  external_conf['deleteFilesAfterUpload']
+        target_db_name = external_conf['targetDb']
+        use_model = external_conf['useJsonModel']
+        use_same_model_for_all_csv = external_conf['useSameModelForAllCsv']
+        model_dir_path = model_dir_path
+    else : 
+        superset_db_name = conf.superset_db
+        user = conf.user
+        password = conf.password
+        host = conf.host
+        port = conf.port
+        target_db_name = conf.target_db
+        update_table_if_exists = conf.update_table_if_exists
+        replace_table_if_exists = conf.replace_table_if_exists
+        delete_files_after_upload =  conf.delete_files_after_upload
+        use_same_model_for_all_csv = use_same_model_for_all_csv
+        use_model = use_model
+        model_dir_path = model_dir_path
+        
+    print(superset_db_name, user , password, host, port, target_db_name, update_table_if_exists, replace_table_if_exists, delete_files_after_upload, use_model, use_same_model_for_all_csv, model_dir_path)
 
     if(use_model and model_dir_path == ''):
         model_dir_path = csv_dir_path
@@ -43,10 +84,10 @@ def upload_csv_in_superset(csv_dir_path,use_model,model_dir_path = ''):
             '''
 
             print('connecting to database')
-            superset_db = Postgresconn(conf.superset_db, conf.user, conf.password, conf.host, conf.port)
+            superset_db = Postgresconn(superset_db_name, user, password, host, port)
             
             print('recovering default database info')
-            query = sq.get_database_info(conf.target_db)
+            query = sq.get_database_info(target_db_name)
 
             try:
                 superset_db.connect()
@@ -54,17 +95,17 @@ def upload_csv_in_superset(csv_dir_path,use_model,model_dir_path = ''):
                 target_db_info = superset_db.get_data_as_dict_norb(query)
                 real_target_db_name = target_db_info[0]['sqlalchemy_uri'].split('/')[-1]
 
-                if (real_target_db_name == conf.target_db):
-                    target_db = Postgresconn(conf.target_db, conf.user, conf.password, conf.host, conf.port)
+                if (real_target_db_name == target_db_name):
+                    target_db = Postgresconn(target_db_name, user, password, host, port)
                     target_db.connect()
-                elif (real_target_db_name == conf.superset_db):
+                elif (real_target_db_name == superset_db_name):
                     target_db = superset_db
                 else:
                     raise Exception("no match db found")
 
                 # recovering target database id
                 print('recovering target database info')
-                query = sq.get_database_info(conf.target_db)
+                query = sq.get_database_info(target_db_name)
                 target_db_id = superset_db.get_data_as_dict_norb(query)[0]['id']
 
                 # when you delete a table afrom superset, only the metadata about table will be removed
@@ -79,7 +120,7 @@ def upload_csv_in_superset(csv_dir_path,use_model,model_dir_path = ''):
                     print('table found')
                     table_id = result[0]['id']
                     
-                    if(conf.update_table_if_exists):
+                    if(update_table_if_exists):
                         insert_metadata = False; # If we only want to update the table, there's no need to insert metadata again.
                         query = sq.count_table_rows()
                         rows_number = superset_db.query_norb(query)
@@ -89,7 +130,7 @@ def upload_csv_in_superset(csv_dir_path,use_model,model_dir_path = ''):
                             
                             superset_db.query_norb(query)    
 
-                    elif(conf.replace_table_if_exists):
+                    elif(replace_table_if_exists):
                         print('replacing table')
                         query = sq.delete_columns_from_superset_table_columns(table_id)
                         superset_db.query_norb(query)
@@ -136,7 +177,7 @@ def upload_csv_in_superset(csv_dir_path,use_model,model_dir_path = ''):
                 target_db.commit()
                 print('commit')
                 
-                if(conf.delete_files_after_upload):
+                if(delete_files_after_upload):
                     csv_file=f'{csv_dir}/{file_name}{conf.csv_ext}'
                     if os.path.exists(csv_file):
                         os.remove(csv_file)
@@ -147,7 +188,7 @@ def upload_csv_in_superset(csv_dir_path,use_model,model_dir_path = ''):
 
 
             except Exception as e:
-                if(conf.delete_files_after_upload):
+                if(delete_files_after_upload):
                     csv_file=f'{csv_dir}/{file_name}{conf.csv_ext}'
                     if os.path.exists(csv_file):
                         os.remove(csv_file)
@@ -157,5 +198,6 @@ def upload_csv_in_superset(csv_dir_path,use_model,model_dir_path = ''):
                 print('executed rollback')
                 print(f"some error occurred \n -> {e}")
                 return 
+
 
 
