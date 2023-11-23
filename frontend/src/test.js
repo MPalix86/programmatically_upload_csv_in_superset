@@ -1,24 +1,20 @@
-const axios = require('axios');
+// Definisci la tua stringa da controllare
+const inputString = '[test]';
 
-const uploadCsv = async function (event, settings) {
-  const apiUrl = 'http://localhost:5000/upload_csv';
-  const postData = {
-    key1: 'value1',
-    key2: 'value2',
-  };
-  axios
-    .post(apiUrl, postData)
-    .then(response => {
-      // Handle the API response data
-      console.log(response.data);
-    })
-    .catch(error => {
-      // Handle errors
-      console.error('Error:', error.message);
-    });
-};
+// Definisci l'espressione regolare per cercare parole tra parentesi quadre
+const regex = /\[([^\]]+)\]/g;
 
-// uploadCsv();
-const { dialog } = require('electron');
+// Cerca corrispondenze nella stringa
+const matches = inputString.match(regex);
 
-getFile();
+// Verifica se ci sono corrispondenze e visualizza i risultati
+if (matches) {
+  console.log('Parole tra parentesi quadre trovate:');
+  matches.forEach(match => {
+    // Estrai la parola tra parentesi quadre
+    const wordInsideBrackets = match.slice(1, -1);
+    console.log(wordInsideBrackets);
+  });
+} else {
+  console.log('Nessuna parola tra parentesi quadre trovata.');
+}

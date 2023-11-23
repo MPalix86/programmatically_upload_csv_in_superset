@@ -23,15 +23,15 @@ const session = new Session();
     /**
      * running a new process with python server for the backend stuff
      */
-    const pythonScript = path.join(__dirname, '..', '..', 'backend', 'main.py');
-    const pythonProcess = childProcess.spawn('python3', [pythonScript]);
-    pythonProcess.stdout.on('data', data => {
-      console.log(` PYTHON ${data}`);
-    });
+    // const pythonScript = path.join(__dirname, '..', '..', 'backend', 'main.py');
+    // const pythonProcess = childProcess.spawn('python3', [pythonScript]);
+    // pythonProcess.stdout.on('data', data => {
+    //   console.log(` PYTHON ${data}`);
+    // });
 
-    pythonProcess.stderr.on('data', data => {
-      console.error(`PYTHON ${data}`);
-    });
+    // pythonProcess.stderr.on('data', data => {
+    //   console.error(`PYTHON ${data}`);
+    // });
 
     const createWindow = () => {
       const dir = path.join(__dirname, 'pages', 'preload.js');

@@ -1,7 +1,7 @@
 import Paths from './paths.js';
 import Session from './session.js';
 // prettier-ignore
-import { startTemplateEngine,registerTemplateElement } from './templateEngine.js';
+import { startTemplateEngine,registerTemplateElement } from './templateEngine/templateEngine.js';
 
 const __dirname = await window.api.getDirname();
 
