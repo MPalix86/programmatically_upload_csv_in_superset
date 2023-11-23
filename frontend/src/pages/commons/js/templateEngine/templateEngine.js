@@ -4,7 +4,7 @@ import { EffectiveElement, BindedAttr } from './effectiveElement.js';
 
 const templateElements = [];
 let templateObserver = undefined;
-const elObserverList = [];
+const pendingObserverElements = [];
 const observerconfig = { childList: true, subtree: false, attributes: false };
 const childObserverconfig = {
   childList: true,
@@ -116,17 +116,18 @@ const createElements = async function () {
   }
 };
 
+const childMutationCallback = function (mutationsList, observer) {
+  console.log('callback');
+  // if(mutationsList.length <=  0) return
+  // for(const mutation of mutationsList){
+  //   console.log(mutation)
+  //   console.log('callback')
+  // }
+};
+
 // prettier-ignore
 const getCustomElementsBindedAttribute = async function (findedEl, effectiveEl, templateEl) {
 
-  const childMutationCallback = function(mutationsList, observer){
-    if(mutationsList.length <=  0) return
-    for(const mutation of mutationsList){
-      console.log(mutation)
-      console.log('callback')
-    }
-
-  }
 
 
   // prettier-ignore
@@ -146,18 +147,10 @@ const getCustomElementsBindedAttribute = async function (findedEl, effectiveEl, 
         element.removeAttribute(noBracketsAttr.bracketName)
         element.setAttribute(noBracketsAttr.realName ,bindedAttr.attrValue);
         bindedAttr.elementsBinded.push(element)
-        console.log('idattrname' , element.dataset[idAttrName])
-        
-        let booleanValue = element.dataset.templateEngineHasObserver === 'true';
-        if(booleanValue) return 
-         element.setAttribute('data-template-engine-has-observer' ,true);
-        
-        
-   
+        if(pendingObserverElements.includes(element)) return
+        pendingObserverElements.push(element)
 
-        // const childObserver = new MutationObserver(childMutationCallback);
-        // console.log('osservo' , element)
-        // childObserver.observe(element, childObserverconfig)
+    
    
       }
     }
@@ -183,7 +176,14 @@ const getCustomElementsBindedAttribute = async function (findedEl, effectiveEl, 
     const bindedAttr = effectiveEl.addBindedAttr(noBracketsAttr.realName, attr.value);
     await getChildrenElementsBindedAttribute(effectiveEl,findedEl,bindedAttr)
   }  
+  for(const element of pendingObserverElements){
 
+    const childObserver = new MutationObserver(childMutationCallback);
+    childObserver.observe(element,childObserverconfig)
+    console.log('osservo' , element)
+    const index = pendingObserverElements.indexOf(element);
+    pendingObserverElements.splice(index, 1);
+  }
 
 };
 
