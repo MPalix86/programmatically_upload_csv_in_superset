@@ -12,11 +12,6 @@ const childObserverconfig = {
   attributes: true,
 };
 const idAttrName = 'data-template-engine-id';
-let id = 0;
-
-const getId = function () {
-  return ++id;
-};
 
 const handleMutation = async function (mutationsList) {
   if (templateObserver) templateObserver.disconnect();
@@ -118,11 +113,23 @@ const createElements = async function () {
 
 const childMutationCallback = function (mutationsList, observer) {
   console.log('callback');
-  // if(mutationsList.length <=  0) return
-  // for(const mutation of mutationsList){
-  //   console.log(mutation)
-  //   console.log('callback')
-  // }
+  if (mutationsList.length <= 0) return;
+  for (const mutation of mutationsList) {
+    if (mutation.type == 'attributes') {
+      console.log('ok');
+      const element = mutation.target;
+      // for (const templateElement of templateElements) {
+      //   console.log('ciclo elementi');
+      //   if (!templateElement.findBindedElement(element)) continue;
+      //   tem
+      //   console.log('trovato', element);
+      // }
+      console.log(
+        templateElements[0].effectiveElements[0].bindedAttrList[0]
+          .elementsBinded[0] == element
+      );
+    }
+  }
 };
 
 // prettier-ignore
@@ -149,9 +156,6 @@ const getCustomElementsBindedAttribute = async function (findedEl, effectiveEl, 
         bindedAttr.elementsBinded.push(element)
         if(pendingObserverElements.includes(element)) return
         pendingObserverElements.push(element)
-
-    
-   
       }
     }
 
@@ -176,11 +180,10 @@ const getCustomElementsBindedAttribute = async function (findedEl, effectiveEl, 
     const bindedAttr = effectiveEl.addBindedAttr(noBracketsAttr.realName, attr.value);
     await getChildrenElementsBindedAttribute(effectiveEl,findedEl,bindedAttr)
   }  
-  for(const element of pendingObserverElements){
 
+  for(const element of pendingObserverElements){
     const childObserver = new MutationObserver(childMutationCallback);
     childObserver.observe(element,childObserverconfig)
-    console.log('osservo' , element)
     const index = pendingObserverElements.indexOf(element);
     pendingObserverElements.splice(index, 1);
   }

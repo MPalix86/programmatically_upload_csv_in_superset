@@ -98,7 +98,7 @@ superset_table_columns_cols = [
 # TBALE_COLUMNS
 # this conf are for the table table_columns in superset that describe each column for a specific dataset
 # if you need a specific cnfigurations for your columns edit the static fields based on your need
-def get_superset_table_columns_conf(table_id:int, column_name:str, data_type:str,uuid:str):
+def get_superset_table_columns_conf(table_id:int, column_name:str, data_type:str,uuid:str,is_dttm:str):
 
     # default values foreach row
     # you need to generate one row per each column of your dataset
@@ -107,7 +107,7 @@ def get_superset_table_columns_conf(table_id:int, column_name:str, data_type:str
         superset_table_columns_cols[1]:'now()',
         superset_table_columns_cols[2]: table_id,
         superset_table_columns_cols[3]: "'" + column_name + "'",
-        superset_table_columns_cols[4]: 'false',
+        superset_table_columns_cols[4]: is_dttm,
         superset_table_columns_cols[5]: 'true',
         superset_table_columns_cols[6]: "'" + data_type + "'",
         superset_table_columns_cols[7]: 'true',

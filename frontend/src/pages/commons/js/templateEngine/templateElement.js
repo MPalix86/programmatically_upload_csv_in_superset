@@ -19,6 +19,17 @@ class TemplateElement {
     this.effectiveElements.push(el)
     return el
   }
+
+  findBindedElement(element) {
+    if (!this.effectiveElements) return;
+    for (const ee of this.effectiveElements) {
+      if (!ee.BindedAttrList) return;
+      for (ba of ee.BindedAttrList) {
+        if (ba.elementsBinded.includes(element)) return true;
+      }
+    }
+    return false;
+  }
 }
 
 export default TemplateElement;

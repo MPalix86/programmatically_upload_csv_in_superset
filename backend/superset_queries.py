@@ -2,6 +2,7 @@ import csv
 import uuid
 import configurations as conf
 import json
+from dateutil import parser
 
 class SupersetQueries:
 
@@ -207,13 +208,17 @@ class SupersetQueries:
                 query += '('
                 data_type = ''
                 data_col = ''
+                is_dttm = 'false'
                 if(self.use_model) : 
                     data_type = self.model[col]["superset_type"]
                     data_col = self.model[col]["name"]
                 else : 
-                    data_type = self.infer_data_types(data[j])['superset'] 
+                    inference = self.infer_data_types(data[j])
+                    data_type = inference['superset']
+                    data_col = inference['data']
+                    is_dttm = inference['is_dttm']
                     data_col = col
-                values_dict = conf.get_superset_table_columns_conf(table_id, data_col, data_type,str(uuid.uuid4()))
+                values_dict = conf.get_superset_table_columns_conf(table_id, data_col, data_type,str(uuid.uuid4()),is_dttm)
                     
             
                 for key in values_dict:
@@ -227,20 +232,46 @@ class SupersetQueries:
         self.print_query(query)
         return(query)
 
-    def infer_data_types(self, col):
-        type = {}
+def infer_date_time(date_str):
+    try:
+
+        parsed_date = parser.parse(date_str)
+        formatted_date = parsed_date.strftime("%Y-%m-%d %H:%M:%S.%f")
+        return formatted_date
+
+    except ValueError as e:
+
+        raise ValueError('')
+
+
+def infer_data_types(col):
+    type = {}
+    try:
+        int(col)
+        type['postgres'] = 'int'
+        type['superset'] = 'BIGINT'
+        type['is_dttm'] = 'false'
+        type['data'] = col
+        return type
+    except:
         try:
-            int(col)
-            type['postgres'] = 'int'
-            type['superset'] = 'BIGINT'
+            float(col)
+            type['postgres'] = 'float'
+            type['superset'] = 'DOUBLE PRECISION'
+            type['is_dttm'] = 'false'
+            type['data'] = col
             return type
         except:
             try:
-                float(col)
-                type['postgres'] = 'float'
-                type['superset'] = 'DOUBLE PRECISION'
+                date_time = infer_date_time(col)
+                type['postgres'] = 'timestamp(3)'
+                type['superset'] = 'TIMESTAMP WITHOUT TIME ZONE'
+                type['is_dttm'] = 'true'
+                type['data'] = date_time
                 return type
             except:
                 type['postgres'] = 'varchar'
                 type['superset'] = 'VARCHAR'
+                type['is_dttm'] = 'false'
+                type['data'] = col
                 return type
