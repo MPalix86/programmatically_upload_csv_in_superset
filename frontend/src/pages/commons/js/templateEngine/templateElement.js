@@ -20,15 +20,18 @@ class TemplateElement {
     return el
   }
 
-  findBindedElement(element) {
+  findEffectiveElementByElementBinded(element, attrName) {
     if (!this.effectiveElements) return;
     for (const ee of this.effectiveElements) {
-      if (!ee.BindedAttrList) return;
-      for (ba of ee.BindedAttrList) {
-        if (ba.elementsBinded.includes(element)) return true;
+      if (ee.bindedAttrList.lenght <= 0) return;
+      for (const ba of ee.bindedAttrList) {
+        if (ba.elementsBinded.lenght <= 0) continue;
+        if (ba.attrName != attrName) continue;
+        for (const el of ba.elementsBinded) {
+          if (el == element) return ee;
+        }
       }
     }
-    return false;
   }
 }
 

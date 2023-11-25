@@ -11,7 +11,6 @@ const childObserverconfig = {
   subtree: true,
   attributes: true,
 };
-const idAttrName = 'data-template-engine-id';
 
 const handleMutation = async function (mutationsList) {
   if (templateObserver) templateObserver.disconnect();
@@ -111,32 +110,26 @@ const createElements = async function () {
   }
 };
 
+// prettier-ignore
 const childMutationCallback = function (mutationsList, observer) {
-  console.log('callback');
+  observer.disconnect()
   if (mutationsList.length <= 0) return;
   for (const mutation of mutationsList) {
     if (mutation.type == 'attributes') {
-      console.log('ok');
       const element = mutation.target;
-      // for (const templateElement of templateElements) {
-      //   console.log('ciclo elementi');
-      //   if (!templateElement.findBindedElement(element)) continue;
-      //   tem
-      //   console.log('trovato', element);
-      // }
-      console.log(
-        templateElements[0].effectiveElements[0].bindedAttrList[0]
-          .elementsBinded[0] == element
-      );
+      const attrName = mutation.attributeName
+      for (const templateElement of templateElements) {
+        const effectiveElement = templateElement.findEffectiveElementByElementBinded(element, attrName);
+        const attrValue = element.getAttribute(attrName)
+        effectiveElement.element.setAttribute(attrName,attrValue)
+      }
     }
   }
+  observer.observe(element,childObserverconfig)
 };
 
 // prettier-ignore
 const getCustomElementsBindedAttribute = async function (findedEl, effectiveEl, templateEl) {
-
-
-
   // prettier-ignore
   const getChildrenElementsBindedAttribute = async function (effectiveEl, element, bindedAttr) {
     const children = element.children
@@ -158,9 +151,6 @@ const getCustomElementsBindedAttribute = async function (findedEl, effectiveEl, 
         pendingObserverElements.push(element)
       }
     }
-
-  
-
   };
 
 
