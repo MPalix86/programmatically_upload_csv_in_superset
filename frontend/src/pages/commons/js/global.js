@@ -3,12 +3,12 @@ import Session from './session.js';
 // prettier-ignore
 import { startTemplateEngine,registerTemplateElement } from './templateEngine/templateEngine.js';
 
-const __dirname = await window.api.getDirname();
+// const __dirname = await window.api.getDirname();
 
-const customDialogFile = `${__dirname}/pages/commons/html/customDialog.html`;
+// const customDialogFile = `${__dirname}/pages/commons/html/customDialog.html`;
 
-// this register a custom element in this way you can declare a custom html element that will be filled the code in te specified template
-registerTemplateElement('custom-dialog', customDialogFile);
+// // this register a custom element in this way you can declare a custom html element that will be filled the code in te specified template
+// registerTemplateElement('custom-dialog', customDialogFile);
 
 const head = document.querySelector('head');
 export const mainContent = document.querySelector('#main-content');

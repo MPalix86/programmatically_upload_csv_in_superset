@@ -33,6 +33,11 @@ class TemplateElement {
       }
     }
   }
+
+  removeEffectiveElements() {
+    this.effectiveElements = [];
+  }
 }
+// prettier-ignore
 
 export default TemplateElement;

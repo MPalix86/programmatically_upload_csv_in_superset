@@ -38,7 +38,6 @@ const dbSettings = function () {
 
   // test connection function
   const testConnection = async function () {
-
     // recovering values 
     settings.port = postgrePortEl.value;
     settings.host = postgreHostEl.value;
@@ -55,7 +54,6 @@ const dbSettings = function () {
       const icon = document.createElement('i')
       const strong = document.createElement('strong')
       const p = document.createElement('p')
-
 
       classList.forEach(c => {
         icon.classList.add(c)

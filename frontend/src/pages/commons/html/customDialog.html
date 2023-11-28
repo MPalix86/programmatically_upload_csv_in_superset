@@ -14,7 +14,7 @@
       if (button) {
         const valueEL = button.parentNode.querySelector('.directory-value');
         const path = await window.api.getDirDialog();
-        valueEL.setAttribute('value', path)
+        if (path) valueEL.setAttribute('value', path)
       }
     });
   })

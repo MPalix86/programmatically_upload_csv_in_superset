@@ -4,8 +4,8 @@ import { EffectiveElement, BindedAttr } from './effectiveElement.js';
 
 const templateElements = [];
 let templateObserver = undefined;
-const pendingObserverElements = [];
-const observerconfig = { childList: true, subtree: false, attributes: false };
+let pendingObserverElements = [];
+const observerconfig = { childList: true, subtree: true, attributes: false };
 const childObserverconfig = {
   childList: true,
   subtree: true,
@@ -13,26 +13,39 @@ const childObserverconfig = {
 };
 
 const handleMutation = async function (mutationsList) {
+  console.log('mutation');
   if (templateObserver) templateObserver.disconnect();
-
   if (mutationsList) {
     for (const mutation of mutationsList) {
+      console.log(mutation);
       if (mutation.type === 'childList') {
-        createElements();
-        console.log('childListMutation');
-      } else if (mutation.type === 'attributes') {
-        console.log('attributes mutation');
+        reset();
+        const customTag = document.querySelector('custom-tag');
+        console.log(customTag);
+        // await createElements();
+        // console.log(templateElements);
       }
     }
   }
   if (templateObserver) templateObserver.observe(document, observerconfig);
 };
 
+const reset = function () {
+  templateObserver = undefined;
+  pendingObserverElements = [];
+  for (const templateElement of templateElements) {
+    console.log(templateElement.effectiveElements);
+    templateElement.removeEffectiveElements();
+    console.log('----------------------------------------');
+    console.log(templateElement.effectiveElements);
+    console.log('****************************************');
+  }
+};
+
 // ON PAGE CHANGE OBSERVER
 export const startTemplateEngine = async function () {
   await createElements();
-  templateObserver = new MutationObserver(handleMutation);
-  templateObserver.observe(document, observerconfig);
+  // templateObserver.observe(document, observerconfig);
 };
 
 export const registerTemplateElement = function (tagName, templatePath) {
@@ -45,6 +58,7 @@ export const registerTemplateElement = function (tagName, templatePath) {
  * elements to load template
  */
 const createElements = async function () {
+  reset();
   // prettier-ignore
   const verifyBindings = function () {
     for (const templateElement of templateElements) {
@@ -112,11 +126,12 @@ const createElements = async function () {
 
 // prettier-ignore
 const childMutationCallback = function (mutationsList, observer) {
-  observer.disconnect()
+  let element = undefined ;
   if (mutationsList.length <= 0) return;
   for (const mutation of mutationsList) {
     if (mutation.type == 'attributes') {
-      const element = mutation.target;
+      element = mutation.target;
+      observer.disconnect()
       const attrName = mutation.attributeName
       for (const templateElement of templateElements) {
         const effectiveElement = templateElement.findEffectiveElementByElementBinded(element, attrName);
@@ -125,7 +140,7 @@ const childMutationCallback = function (mutationsList, observer) {
       }
     }
   }
-  observer.observe(element,childObserverconfig)
+  if(element) observer.observe(element,childObserverconfig)
 };
 
 // prettier-ignore
@@ -134,7 +149,6 @@ const getCustomElementsBindedAttribute = async function (findedEl, effectiveEl, 
   const getChildrenElementsBindedAttribute = async function (effectiveEl, element, bindedAttr) {
     const children = element.children
     if(!children)return
-
     for(const child of children ) {
       getChildrenElementsBindedAttribute(effectiveEl,child,bindedAttr)
     } 

@@ -12,8 +12,11 @@ const generalSettings = async function () {
   const replaceTableIfExistsInput = document.querySelector('#replace-table-if-exists');
   const deleteFilesAfterUploadCheckbox = document.querySelector('#delete-files-after-upload');
   const useSameJsonForAllCsvCheckbox = document.querySelector('#use-same-json-for-all-csv');
-  // const jsonFolderPathInput = document.querySelector('json-dir-path').chil
-  // const csvFolderPathInput = document.querySelector('csv-dir-path')
+  const jsonDirPath = document.querySelector('#json-dir-path')
+  const csvDirPath = document.querySelector('#csv-dir-path')
+  const jsonDirPathInput = jsonDirPath.querySelector('input')
+  const csvDirPathInput = csvDirPath.querySelector('input')
+
 
 
   const settings = Session.settings;
@@ -26,14 +29,26 @@ const generalSettings = async function () {
   replaceTableIfExistsInput.checked = settings.replaceTableIfExists
   useSameJsonForAllCsvCheckbox.checked = settings.useSameJsonForAllCsv
   deleteFilesAfterUploadCheckbox.checked = settings.deleteFilesAfterUpload
+  csvDirPathInput.setAttribute('value', settings.csvDirPath)
+  jsonDirPathInput.setAttribute('value', settings.jsonModelDirPath)
+
 
   useSameJsonForAllCsvCheckbox.disabled = !useJsonModelCheckbox.checked
 
+
+  const jsonModelCheckboxHandler = function () {
+    if(!useJsonModelCheckbox.checked) {
+      useSameJsonForAllCsvCheckbox.checked = false
+      jsonDirPath.classList.add('d-none')
+    }
+    else {
+      jsonDirPath.classList.remove('d-none')
+
+    }
+    useSameJsonForAllCsvCheckbox.disabled = !useJsonModelCheckbox.checked
+  }
   // checkbox verifying
-  useJsonModelCheckbox.addEventListener('change', function(){
-    if(!useJsonModelCheckbox.checked) useSameJsonForAllCsvCheckbox.checked = false
-     useSameJsonForAllCsvCheckbox.disabled = !useJsonModelCheckbox.checked
-  })
+  useJsonModelCheckbox.addEventListener('change',jsonModelCheckboxHandler)
 
   // saveSettings 
   const saveSettings = function(){
@@ -42,14 +57,60 @@ const generalSettings = async function () {
     settings.replaceTableIfExists = replaceTableIfExistsInput.checked;
     settings.useSameJsonForAllCsv = useSameJsonForAllCsvCheckbox.checked;
     settings.deleteFilesAfterUpload = deleteFilesAfterUploadCheckbox.checked;
+    settings.csvDirPath = csvDirPathInput.getAttribute('value')
+    settings.jsonModelDirPath = jsonDirPathInput.getAttribute('value')
   } 
+
+  const verifySettings = function(){
+    const jsonPathVal  = jsonDirPathInput.attributes['value'].value
+    const csvPathVal = csvDirPathInput.attributes['value'].value
+    let jsonPathVerified = false;
+    let csvPathValVerified = false;
+
+    if(useJsonModelCheckbox.checked){
+      if(!jsonPathVal){
+        jsonDirPathInput.classList.add('is-invalid')
+      }else {
+        jsonDirPathInput.classList.remove('is-invalid')
+        jsonPathVerified = true;
+      }
+    }else jsonPathVerified = true
+
+    if(csvPathVal){
+      csvPathValVerified = true;
+      csvDirPathInput.classList.remove('is-invalid')
+    }else csvDirPathInput.classList.add('is-invalid')
+
+    if(csvPathValVerified && jsonPathVerified) return true
+    return false;
+  }
 
 
   // prettier-ignore
   nextPageBtn.addEventListener('click', function(){
-    frontEndCommons.handleNextBtn(Paths.dbSettingsHtml, Paths.dbSettingsJs)
     saveSettings()
+    if(verifySettings()) frontEndCommons.handleNextBtn(Paths.dbSettingsHtml, Paths.dbSettingsJs)
+    
   });
+
+
+
+  const customDialogs = document.querySelectorAll('.custom-dialog')
+  customDialogs.forEach(d => {
+    d.addEventListener('click', async function(event) {
+      const button = event.target.closest('.select-directory');
+      if (button) {
+        const valueEL = button.parentNode.querySelector('.directory-value');
+        const path = await window.api.getDirDialog();
+        if (path) valueEL.setAttribute('value', path)
+      }
+    });
+  })
+
+  
+
+  jsonModelCheckboxHandler()
+
 
 
 };

@@ -18,10 +18,6 @@ let Session = class {
   get settings() {
     return this.settings;
   }
-
-  set settings(settings) {
-    this.settings = settings;
-  }
 };
 
 module.exports = Session;

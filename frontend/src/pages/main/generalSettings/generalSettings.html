@@ -55,13 +55,13 @@
       Use JSON model
     </label>
 
-    <!-- 
+    <div id="json-dir-path" class="">
+      <div class="col custom-dialog" style="display:flex; padding-bottom:10px">
+        <button class="select-directory btn btn-primary btn-sm"><i class="bi bi-folder2"></i></button>
+        <input placeholder="select json models path" type="text" class=" form-control directory-value"> </input>
+      </div>
+    </div>
 
-    <label>Select the folder containig the JSON files</label>
-    <div id="json-dir-path" class="col " style="display:flex; padding-bottom:10px">
-      <button class="select-directory btn btn-primary btn-sm"><i class="bi bi-folder2"></i></button>
-      <input placeholder="select fodler" readonly type="text" class=" form-control directory-value"> </input>
-    </div> -->
 
 
     <!-- USE SAME JSON FOR ALL CSV -->
@@ -79,7 +79,6 @@
 
 
 
-
   <!-- DELETE AFTER UPLOADS-->
   <div class="form-check">
     <p>
@@ -90,22 +89,18 @@
       Delete files after upload
     </label>
   </div>
-
   <hr>
 
-  <!-- <div class="custom-dialog">
-    <label></label>
-    <div id="csv-dir-path" class="col custom-dialog" style="display:flex; padding-bottom:10px">
-      <button class="select-directory btn btn-primary btn-sm"><i class="bi bi-folder2"></i></button>
-      <input placeholder="select fodler" readonly type="text" class=" form-control directory-value"> </input>
+
+  <div id="csv-dir-path" class="form-check">
+    <p> Select the folder containing the csv files </p>
+    <div class="">
+      <div class="col custom-dialog" style="display:flex; padding-bottom:10px">
+        <button class="select-directory btn btn-primary btn-sm"><i class="bi bi-folder2"></i></button>
+        <input placeholder="select csv directory" readonly type="text" class=" form-control directory-value"> </input>
+      </div>
     </div>
-  </div> -->
-
-
-
-  <custom-dialog [placeholder]="select path" [readonly] [value]="" place> </custom-dialog>
-
-  <custom-dialog [value]=""> </custom-dialog>
+  </div>
 
 
 

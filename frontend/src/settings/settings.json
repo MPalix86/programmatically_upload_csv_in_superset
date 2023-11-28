@@ -4,12 +4,12 @@
   "useJsonModel": false,
   "useSameModelForAllCsv": false,
   "deleteFilesAfterUpload": false,
-  "modelDirPath": "",
+  "jsonModelDirPath": "",
   "csvDirPath": "",
   "user": "superset",
   "host": "127.0.0.1",
   "port": 5432,
   "password": "superset",
-  "targetDb": "example",
+  "targetDb": "examples",
   "supersetDb": "superset"
 }

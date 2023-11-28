@@ -69,10 +69,11 @@ exports.testDbConnection = async function (event, dbSettings) {
   }
 };
 
-exports.uploadCsv = async function (event, dbSettings) {
-  const apiUrl = 'http://localhost:5000';
+exports.uploadCsv = async function (event, settings) {
+  const apiUrl = 'http://localhost:5000/upload_csv';
+
   axios
-    .get(apiUrl)
+    .post(apiUrl, settings)
     .then(response => {
       // Handle the API response data
       console.log(response.data);
@@ -92,10 +93,4 @@ exports.getDirDialog = async function () {
 exports.getFileDialog = async function () {
   const res = await dialog.showOpenDialog({ properties: ['openFile'] });
   if (!res.canceled) return res.filePaths;
-};
-
-exports.getRandomUuid = async function () {
-  const uuid = require('uuid');
-  console.log(randomUUID());
-  return randomUUID;
 };
