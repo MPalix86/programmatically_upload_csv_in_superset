@@ -1,6 +1,6 @@
 __pycache__
-frontend/out/
-frontend/node_modules/
-backend/dist
-backend/main.spec
-backend/build/
+.prettierrc
+dist
+main.spec
+build/
+.vscode
