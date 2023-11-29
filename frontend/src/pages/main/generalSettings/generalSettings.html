@@ -4,6 +4,11 @@
 
   <hr>
 
+  <p>
+    <strong>NOTE : This tool works only with postgres database</strong>
+  </p>
+  <br>
+
   <!-- UPDATE TABLE IF EXISTS -->
   <div class="form-check">
     <p>
@@ -42,7 +47,7 @@
   <hr>
 
   <!-- USE JSON MODEL -->
-  <div class="form-check">
+  <div hidden class="form-check">
     <p>
       Use a JSON model that describes the CSV file you are using.
       <strong>It's assumed the CSV model has the same name as the CSV file you're uploading.</strong>
@@ -55,7 +60,7 @@
       Use JSON model
     </label>
 
-    <div id="json-dir-path" class="">
+    <div hidden id="json-dir-path" class="">
       <div class="col custom-dialog" style="display:flex; padding-bottom:10px">
         <button class="select-directory btn btn-primary btn-sm"><i class="bi bi-folder2"></i></button>
         <input placeholder="select json models path" type="text" class=" form-control directory-value"> </input>
@@ -82,7 +87,7 @@
   <!-- DELETE AFTER UPLOADS-->
   <div class="form-check">
     <p>
-      Delete files after upload <strong>All files will be deleted, including the JSON model files.</strong>
+      Delete files after upload <strong>All files will be deleted</strong>
     </p>
     <input class="form-check-input" type="checkbox" value="" id="delete-files-after-upload">
     <label class="form-check-label">
@@ -93,7 +98,7 @@
 
 
   <div id="csv-dir-path" class="form-check">
-    <p> Select the folder containing the csv files </p>
+    <p style="margin-bottom: 5px;"> <strong>select the folder containing the csv files</strong> </p>
     <div class="">
       <div class="col custom-dialog" style="display:flex; padding-bottom:10px">
         <button class="select-directory btn btn-primary btn-sm"><i class="bi bi-folder2"></i></button>

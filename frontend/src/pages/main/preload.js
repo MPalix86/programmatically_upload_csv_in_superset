@@ -13,6 +13,7 @@ contextBridge.exposeInMainWorld('api', {
   getFileDialog: () => ipcRenderer.invoke('get-file-dialog'),
   startWatchingLogs: () => ipcRenderer.invoke('start-watching-logs'),
   stopWatchingLogs: () => ipcRenderer.invoke('stop-watching-logs'),
+  openExternalLink: (link) => ipcRenderer.invoke('open-external-link',link),
 
 
   // ON

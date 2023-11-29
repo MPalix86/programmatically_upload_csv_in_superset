@@ -20,9 +20,9 @@ const main = async function () {
     await session.loadSettings();
     console.log(session.settings);
 
-    contextMenu({
-      showSaveImageAs: true,
-    });
+    // contextMenu({
+    //   showSaveImageAs: true,
+    // });
 
     /**
      * running a new process with python server for the backend stuff
@@ -62,6 +62,7 @@ const main = async function () {
       electron.ipcMain.handle('get-dir-dialog', ipcController.getDirDialog) 
       electron.ipcMain.handle('start-watching-logs', () => ipcController.startWatchingLogs(win)) 
       electron.ipcMain.handle('stop-watching-logs', ()=> ipcController.stopWatchingLogs(win)) 
+      electron.ipcMain.handle('open-external-link', (event,link)=> ipcController.openExternalLink(link)) 
       createWindow();
       app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow();

@@ -6,6 +6,7 @@ const { randomUUID } = require('crypto');
 const dialog = require('electron').dialog;
 const logsWatcher = require('./logsWatcher');
 const Tail = require('tail').Tail;
+const opn = require('opn');
 
 /**
  * LISTENER
@@ -107,4 +108,8 @@ exports.startWatchingLogs = function (win) {
 exports.stopWatchingLogs = function () {
   tail.unwatch();
   tail = undefined;
+};
+
+exports.openExternalLink = function (link) {
+  opn(link);
 };
