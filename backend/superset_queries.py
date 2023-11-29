@@ -3,6 +3,10 @@ import uuid
 import configurations as conf
 import json
 from dateutil import parser
+import logging
+
+logging.basicConfig(filename=conf.get_log_file(), level=logging.INFO, format='%(asctime)s - %(levelname)s: %(message)s')
+
 
 class SupersetQueries:
 
@@ -39,19 +43,19 @@ class SupersetQueries:
         self.csv_file_name = csv_file_name
         if(self.use_model):
             try:
-                print(f"loading model from: {self.model_dir_path}/{self.csv_file_name}.json ")
+                logging.info(f"loading model from: {self.model_dir_path}/{self.csv_file_name}.json ")
                 with open(f"{self.model_dir_path}/{self.csv_file_name}.json", "r") as json_file:
                     self.model = json.load(json_file)
-                    print('model loaded correctly')
+                    logging.info('model loaded correctly')
             except FileNotFoundError:
-                print(FileNotFoundError.errno)
-                print("error occurred loading model, the upload will continue trying to infer data types and using column names as field name for superset")
+                logging.info(FileNotFoundError.errno)
+                logging.info("error occurred loading model, the upload will continue trying to infer data types and using column names as field name for superset")
                 self.use_model = False;
                 self.model = {}
     
     def print_query(self,query):
         if(conf.print_queries):
-            print(query)
+            logging.info(query)
       
 
     # Your other methods can be defined here as instance methods.
@@ -143,18 +147,20 @@ class SupersetQueries:
             insert_query += ') VALUES \n' 
 
             # insert query generation 
-        
             for i,row in enumerate(reader,start=1):
                 insert_query = f'{insert_query} ('                   
                 for j, col in enumerate(row, start=1):              
-                    col = col.replace("'","''")                     # replacing ' with '', ' cause problesm to the query
-                    try:        
-                        float(col)                                  # trying to convert in float, because if value is not a number must be escaped with -> ''
-                    except:
-                        if(col == ''):                              # if value is '' (empty string) 
-                            col = 'NULL'                            # must add NULL value or postgres return error
-                        else:                                       
-                            col = f"'{col}'"                        # if it's string, simply add quotes 
+                    # replacing ' with '', ' cause problesm to the query
+                    data_type_obj = self.infer_data_types(col)
+                    col = data_type_obj['data']
+                    col = col.replace("'", "''")
+                    if (data_type_obj['postgres'] != self.postgres_types['int'] or data_type_obj['postgres'] != self.postgres_types['float']):
+                        col = data_type_obj['data']
+                        if (col == ''):
+                            col = 'NULL'  # if col is empty we must put NULL
+                        else:
+                            # if it's string, simply add quotes
+                            col = f"'{col}'"                      # if it's string, simply add quotes 
                     if(j == len(row)):
                         insert_query =  insert_query + col
                     else: insert_query = insert_query + col + ','   # add comma only if is not last element 
@@ -215,7 +221,6 @@ class SupersetQueries:
                 else : 
                     inference = self.infer_data_types(data[j])
                     data_type = inference['superset']
-                    data_col = inference['data']
                     is_dttm = inference['is_dttm']
                     data_col = col
                 values_dict = conf.get_superset_table_columns_conf(table_id, data_col, data_type,str(uuid.uuid4()),is_dttm)
@@ -232,46 +237,54 @@ class SupersetQueries:
         self.print_query(query)
         return(query)
 
-def infer_date_time(date_str):
-    try:
-
-        parsed_date = parser.parse(date_str)
-        formatted_date = parsed_date.strftime("%Y-%m-%d %H:%M:%S.%f")
-        return formatted_date
-
-    except ValueError as e:
-
-        raise ValueError('')
-
-
-def infer_data_types(col):
-    type = {}
-    try:
-        int(col)
-        type['postgres'] = 'int'
-        type['superset'] = 'BIGINT'
-        type['is_dttm'] = 'false'
-        type['data'] = col
-        return type
-    except:
+    def infer_date_time(self,date_str):
         try:
-            float(col)
-            type['postgres'] = 'float'
-            type['superset'] = 'DOUBLE PRECISION'
+
+            parsed_date = parser.parse(date_str)
+            formatted_date = parsed_date.strftime("%Y-%m-%d %H:%M:%S.%f")
+            return formatted_date
+
+        except ValueError as e:
+
+            raise ValueError('')
+
+
+    postgres_types = {
+        "int": 'int',
+        "float": 'float',
+        "date_time": 'timestamp(3)',
+        "varchar": 'varchar',
+    }
+
+
+    def infer_data_types(self ,col):
+        type = {}
+        try:
+            int(col)
+            type['postgres'] = self.postgres_types['int']
+            type['superset'] = 'BIGINT'
             type['is_dttm'] = 'false'
             type['data'] = col
             return type
         except:
             try:
-                date_time = infer_date_time(col)
-                type['postgres'] = 'timestamp(3)'
-                type['superset'] = 'TIMESTAMP WITHOUT TIME ZONE'
-                type['is_dttm'] = 'true'
-                type['data'] = date_time
-                return type
-            except:
-                type['postgres'] = 'varchar'
-                type['superset'] = 'VARCHAR'
+                float(col)
+                type['postgres'] = self.postgres_types['float']
+                type['superset'] = 'DOUBLE PRECISION'
                 type['is_dttm'] = 'false'
                 type['data'] = col
                 return type
+            except:
+                try:
+                    date_time = self.infer_date_time(col)
+                    type['postgres'] = self.postgres_types['date_time']
+                    type['superset'] = 'TIMESTAMP WITHOUT TIME ZONE'
+                    type['is_dttm'] = 'true'
+                    type['data'] = f"{date_time}"
+                    return type
+                except:
+                    type['postgres'] = self.postgres_types['varchar']
+                    type['superset'] = 'VARCHAR'
+                    type['is_dttm'] = 'false'
+                    type['data'] = col
+                    return type

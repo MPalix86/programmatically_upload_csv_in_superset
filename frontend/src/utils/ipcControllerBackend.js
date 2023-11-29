@@ -5,6 +5,7 @@ const axios = require('axios');
 const dialog = require('electron').dialog;
 const Tail = require('tail').Tail;
 const opn = require('opn');
+const logger = require('./../utils/logger');
 
 /**
  * LISTENER
@@ -56,34 +57,38 @@ exports.testDbConnection = async function (event, dbSettings) {
     password: dbSettings.password,
     port: dbSettings.port,
   });
+
   // prettier-ignore
   try {
     const client = await pool.connect();
-    console.log('Connected to PostgreSQL database');
+    logger.info('Connected to PostgreSQL database');
     client.release();
     return { status: true, msg: 'Connected to PostgreSQL database' };
   } catch (error) {
-    console.error('Error connecting to the database', error.message);
+    logger.error('Error connecting to the database', error.message);
     return { status: false, msg: `Error connecting to the database ${error.message}`};
   } finally {
     await pool.end();
   }
 };
 
+// prettier-ignore
 exports.uploadCsv = async function (event, settings) {
-  const apiUrl = '';
+  const apiBeUploadCsv  ='http://localhost:5000/upload_csv'
+  logger.info('starting upload of csv file')
+  logger.info(apiBeUploadCsv);
   try {
-    const response = await axios.post(apiUrl, settings);
-    console.log('response received', response.data);
+    const response = await axios.post(apiBeUploadCsv, settings);
+    console.info(response.data, 'response received upload ended');
     return response.data;
   } catch (err) {
+    logger.info(err, 'error during upload of the csv file');
     return err;
   }
 };
 
 exports.getDirDialog = async function () {
   const res = await dialog.showOpenDialog({ properties: ['openDirectory'] });
-  console.log(res.filePaths);
   if (!res.canceled) return res.filePaths;
 };
 
@@ -95,8 +100,8 @@ exports.getFileDialog = async function () {
 let tail = undefined;
 
 exports.startWatchingLogs = function (win) {
-  // prettier-ignore
-  tail = new Tail( path.join(__dirname, '..', '..', '..', 'logs', 'csv_uploader.log'));
+  logger.info('starting watching file');
+  tail = new Tail(process.env.beLogFilePath);
 
   tail.on('line', data => {
     win.webContents.send('log-event', data);

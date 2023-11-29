@@ -1,3 +1,5 @@
+import platform
+import os
 
 # the dataset name is created with the files names.
 # if a dataset with same name is already in db will update the table without deleting and recreating it
@@ -29,6 +31,27 @@ password="superset"     # your password
 target_db="examples"    # db on wich upload dataset (you must create the db in superset first) (if you don't have a target db leave it blank)
 superset_db="superset"  # the defalut superset db in wich superset store all metadata
 
+
+
+def get_log_file():
+    log_dir_name = '.programmatically_upload_csv';
+    log_file_name_fe = 'fe.log'
+    log_file_name_be =  'be.log'
+
+    log_file = None
+    # Esegui azioni basate sul sistema operativo
+    if platform.system() == 'Linux':
+        log_file = os.path.join(os.path.expanduser('~'),log_dir_name ,log_file_name_be)
+    elif platform.system() == 'Windows':
+        log_file = os.path.join(os.path.expanduser('~'), 'Documents', log_dir_name,log_file_name_be )
+    elif platform.system() == 'Darwin':
+        log_file =   os.path.join(os.path.expanduser('~'), log_dir_name,log_file_name_be)
+
+    print(log_file)
+    with open(log_file, 'w') as file:
+        pass
+
+    return log_file
 
 
 

@@ -5,12 +5,10 @@ const contextMenu = require('electron-context-menu');
 const Session = require(`./utils/session`);
 const childProcess = require('child_process');
 const Menu = electron.Menu;
-const customEnv = require('custom-env');
 const logger = require('./utils/logger');
 
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
-customEnv.env('prod');
 
 const session = new Session();
 
@@ -24,18 +22,23 @@ const main = async function () {
       showSaveImageAs: true,
     });
 
-    /**
-     * running a new process with python server for the backend stuff
-     */
-    const pythonScript = path.join(__dirname, '..', '..', 'backend', 'main.py');
-    const pythonProcess = childProcess.spawn('python3', [pythonScript]);
-    pythonProcess.stdout.on('data', data => {
-      logger.info(` PYTHON BACKEND START ${data}`);
-    });
+    try {
+      /**
+       * running a new process with python server for the backend stuff
+       */
+      const pythonScript = path.join(__dirname, '..', 'extraResources', 'main');
+      logger.info({ pythonScript }, ' provo a caricare il file');
+      const pythonProcess = childProcess.spawn(pythonScript);
+      pythonProcess.stdout.on('data', data => {
+        logger.info(` PYTHON BACKEND START ${data}`);
+      });
 
-    pythonProcess.stderr.on('data', data => {
-      logger.error(`PYTHON PROCESS ERROR ${data}`);
-    });
+      pythonProcess.stderr.on('data', data => {
+        logger.error(`PYTHON PROCESS ERROR ${data}`);
+      });
+    } catch (err) {
+      logger.error(err);
+    }
 
     const createWindow = () => {
       const dir = path.join(__dirname, 'pages', 'preload.js');
