@@ -11,6 +11,10 @@ class Paths {
   static commonsDir;
   static htmlDir;
   static customDialog;
+  static sidebarHtml;
+  static sidebarJs;
+  static githubHtml;
+  static githubJs;
 
   // prettier-ignore
   static async init() {
@@ -20,6 +24,10 @@ class Paths {
     this.commonsDir = `${this.pagesDir}/commons`
       this.htmlDir = `${this.commonsDir}/html`
         this.customDialog = `${this.htmlDir}/customDialog.html`
+        const sidebarDir = `${this.htmlDir}/sidebar`
+          this.sidebarHtml = `${sidebarDir}/sidebar.html`
+          this.sidebarJs = `${sidebarDir}/sidebar.js`
+
 
 
     this.mainDir = `${this.pagesDir}/main`;
@@ -36,6 +44,10 @@ class Paths {
       this.uploadCsvDir = `${this.mainDir}/uploadCsv`;
       this.uploadCsvHtml = `${this.uploadCsvDir}/uploadCsv.html`;
       this.uploadCsvJs = `${this.uploadCsvDir}/uploadCsv.js`;
+
+      const githubDir = `${this.mainDir}/github`;
+      this.githubHtml = `${githubDir}/github.html`;
+      this.githubJs = `${githubDir}/github.js`;
   }
 
   static async nextPage(pagePath, jsPath) {

@@ -4,6 +4,8 @@ const { Pool } = require('pg');
 const axios = require('axios');
 const { randomUUID } = require('crypto');
 const dialog = require('electron').dialog;
+const logsWatcher = require('./logsWatcher');
+const Tail = require('tail').Tail;
 
 /**
  * LISTENER
@@ -71,17 +73,13 @@ exports.testDbConnection = async function (event, dbSettings) {
 
 exports.uploadCsv = async function (event, settings) {
   const apiUrl = 'http://localhost:5000/upload_csv';
-
-  axios
-    .post(apiUrl, settings)
-    .then(response => {
-      // Handle the API response data
-      console.log(response.data);
-    })
-    .catch(error => {
-      // Handle errors
-      console.error('Error:', error.message);
-    });
+  try {
+    const response = await axios.post(apiUrl, settings);
+    console.log('response received', response.data);
+    return response.data;
+  } catch (err) {
+    return err;
+  }
 };
 
 exports.getDirDialog = async function () {
@@ -93,4 +91,20 @@ exports.getDirDialog = async function () {
 exports.getFileDialog = async function () {
   const res = await dialog.showOpenDialog({ properties: ['openFile'] });
   if (!res.canceled) return res.filePaths;
+};
+
+let tail = undefined;
+
+exports.startWatchingLogs = function (win) {
+  // prettier-ignore
+  tail = new Tail( path.join(__dirname, '..', '..', '..', 'logs', 'csv_uploader.log'));
+
+  tail.on('line', data => {
+    win.webContents.send('log-event', data);
+  });
+};
+
+exports.stopWatchingLogs = function () {
+  tail.unwatch();
+  tail = undefined;
 };

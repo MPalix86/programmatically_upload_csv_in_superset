@@ -58,8 +58,10 @@ const main = async function () {
       electron.ipcMain.handle('get-dirname', () =>{return  __dirname } );
       electron.ipcMain.handle('get-settings', () => {return session.settings});
       electron.ipcMain.handle('test-db-connection', (event, dbSettings) => ipcController.testDbConnection(event,dbSettings) )
-      electron.ipcMain.handle('upload-csv', (event, settings) => ipcController.uploadCsv(event,settings) )
+      electron.ipcMain.handle('upload-csv', (event, settings) => {return ipcController.uploadCsv(event,settings)} )
       electron.ipcMain.handle('get-dir-dialog', ipcController.getDirDialog) 
+      electron.ipcMain.handle('start-watching-logs', () => ipcController.startWatchingLogs(win)) 
+      electron.ipcMain.handle('stop-watching-logs', ()=> ipcController.stopWatchingLogs(win)) 
       createWindow();
       app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow();
@@ -68,15 +70,11 @@ const main = async function () {
 
     const menu = Menu.buildFromTemplate([
       {
-        label: app.name,
+        label: 'file',
         submenu: [
           {
-            click: () => mainWindow.webContents.send('update-counter', 1),
-            label: 'Increment',
-          },
-          {
-            click: () => mainWindow.webContents.send('update-counter', -1),
-            label: 'Decrement',
+            click: () => win.close(),
+            label: 'exit',
           },
         ],
       },

@@ -150,3 +150,8 @@ fieldset:disabled .btn {
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
 }
+
+/* navbar */
+.nav-link:hover i {
+  color: #e17f89; /* Cambia il colore desiderato */
+}

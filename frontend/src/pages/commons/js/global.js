@@ -1,16 +1,8 @@
 import Paths from './paths.js';
 import Session from './session.js';
-// prettier-ignore
-import { startTemplateEngine,registerTemplateElement } from './templateEngine/templateEngine.js';
-
-// const __dirname = await window.api.getDirname();
-
-// const customDialogFile = `${__dirname}/pages/commons/html/customDialog.html`;
-
-// // this register a custom element in this way you can declare a custom html element that will be filled the code in te specified template
-// registerTemplateElement('custom-dialog', customDialogFile);
 
 const head = document.querySelector('head');
+const sideBar = document.querySelector('#sidebar');
 export const mainContent = document.querySelector('#main-content');
 
 export const frontEndCommons = {
@@ -55,13 +47,16 @@ window.api.loadHeader().then(res => {
  */
 await Promise.all([Paths.init(), Session.init()]);
 
+// loading sidebar
+const loadedPages = await Paths.nextPage(Paths.sidebarHtml, Paths.sidebarJs);
+const dynamicScript = document.createElement('script');
+sideBar.innerHTML = loadedPages.html;
+dynamicScript.textContent = loadedPages.js;
+dynamicScript.type = 'module';
+sideBar.append(dynamicScript);
+
 // loading firts page
 await frontEndCommons.handleNextBtn(
   Paths.generalSettingsHtml,
   Paths.generalSettingsJs
 );
-
-/**
- * starts the template engine that
- */
-startTemplateEngine();
