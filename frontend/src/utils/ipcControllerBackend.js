@@ -2,9 +2,7 @@ const fs = require('fs').promises;
 const path = require('path');
 const { Pool } = require('pg');
 const axios = require('axios');
-const { randomUUID } = require('crypto');
 const dialog = require('electron').dialog;
-const logsWatcher = require('./logsWatcher');
 const Tail = require('tail').Tail;
 const opn = require('opn');
 
@@ -73,7 +71,7 @@ exports.testDbConnection = async function (event, dbSettings) {
 };
 
 exports.uploadCsv = async function (event, settings) {
-  const apiUrl = 'http://localhost:5000/upload_csv';
+  const apiUrl = '';
   try {
     const response = await axios.post(apiUrl, settings);
     console.log('response received', response.data);

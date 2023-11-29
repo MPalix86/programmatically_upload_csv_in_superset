@@ -5,24 +5,24 @@ const contextMenu = require('electron-context-menu');
 const Session = require(`./utils/session`);
 const childProcess = require('child_process');
 const Menu = electron.Menu;
+const customEnv = require('custom-env');
+const logger = require('./utils/logger');
 
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
-const dialog = electron.dialog;
+customEnv.env('prod');
 
 const session = new Session();
 
 // prettier-ignore
 let win = undefined
-
 const main = async function () {
   try {
     await session.loadSettings();
-    console.log(session.settings);
 
-    // contextMenu({
-    //   showSaveImageAs: true,
-    // });
+    contextMenu({
+      showSaveImageAs: true,
+    });
 
     /**
      * running a new process with python server for the backend stuff
@@ -30,11 +30,11 @@ const main = async function () {
     const pythonScript = path.join(__dirname, '..', '..', 'backend', 'main.py');
     const pythonProcess = childProcess.spawn('python3', [pythonScript]);
     pythonProcess.stdout.on('data', data => {
-      console.log(` PYTHON ${data}`);
+      logger.info(` PYTHON BACKEND START ${data}`);
     });
 
     pythonProcess.stderr.on('data', data => {
-      console.error(`PYTHON ${data}`);
+      logger.error(`PYTHON PROCESS ERROR ${data}`);
     });
 
     const createWindow = () => {
@@ -87,7 +87,7 @@ const main = async function () {
       pythonProcess.kill('SIGINT');
     });
   } catch (error) {
-    console.error(error.message);
+    logger.error(error.message);
   }
 };
 
