@@ -14,14 +14,6 @@ logging.basicConfig(filename=conf.get_log_file(), level=logging.INFO, format='%(
 
 app = Flask('programmaticaly_upload_csv_in_superset')
 
-@app.route('/')
-def hello_world():
-    data = {
-        'message': 'Hello, World!',
-        'number': 42
-    }
-    return  jsonify(data)
-
 
 
 @app.route('/upload_csv', methods=['POST'])
