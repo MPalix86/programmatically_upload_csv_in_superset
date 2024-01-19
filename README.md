@@ -1,7 +1,7 @@
 # programmatically_upload_csv_in_superset
 
 A Python script that manages all CSV files in a specified folder and creates a dataset for each CSV in Superset. This script has been tested on Superset version 1.3.2.
-The script creates a table foreach csv in the specified folder. The script is also capable of inferring data types, including date-time.
+The script is also capable of inferring data types, including date-time.
 
 
 ### LOCAL CONFIGURATION 
