@@ -12,8 +12,8 @@ Installation instructions:
 - Clone this repository.
 - If you haven't installed dependencies yet, run pip install psycopg2 in your terminal.
  
-Note: For the script to function properly, Superset must be running, and PostgreSQL must be accessible
-see the exemple inside `usage_example.py`
+Note: For the script to function properly, Superset must be running, and PostgreSQL must be accessible.
+you can find an exemple inside `usage_example.py`
 
 ### EXPOSING API 
 The file `main.py` contains a simple API through which you can call this service externally. If you want to use it as an API, the POST call must look like:
