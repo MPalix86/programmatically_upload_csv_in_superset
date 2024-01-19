@@ -1,14 +1,16 @@
 # programmatically_upload_csv_in_superset
 
-A simple script in python that keeps all csv files in a specified folder and creates a dataset foreach csv in superset.
-This script is tested on superset **1.3.2**
+A Python script that manages all CSV files in a specified folder and creates a dataset for each CSV in Superset. This script has been tested on Superset version 1.3.2.
 
-how to install:
+The script is capable of inferring data types, including date-time.
 
-- Clone this repository.
-- Open configurations.py and edit it according to your needs.
-- Install dependencies if you don't have them already by running `pip install psycopg2`
-- Open a terminal and navigate to the folder where you downloaded the script.
-- Run the command `python3 superset_csv_upload.py` in the terminal.
+Please refer to the configuration file configs.py to adjust all settings according to your requirements.
 
-note : in order to work, superset must run and postgres must be accessible !
+Installation instructions:
+
+    Clone this repository.
+    If you haven't installed dependencies yet, run pip install psycopg2 in your terminal.
+    Navigate to the folder where you downloaded the script in the terminal.
+    Execute the command python3 superset_csv_upload.py
+
+Note: For the script to function properly, Superset must be running, and PostgreSQL must be accessible
