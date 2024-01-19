@@ -7,22 +7,18 @@ update_table_if_exists = True
 
 # the dataset name is created with the file name.
 # if a dataset with same name is already in db will delete the table and replace it
+# also notice that replacing table will make you lost all your dashboard with the target dataset,
+# if you have active dashboards or charts that use the target dataset update instead of replacing.
 # if update_table_if_exists is True this conf parameter will not be applied 
 replace_table_if_exists = True
-
-# superset table name in this table superset will save a list of all the tables
-superset_tables_name = 'tables'
-
-# in this table superset will save a list of all the columns of all our tables
-superset_table_columns_name = 'table_columns'
 
 # true if delete file after creating a superset table (csv and eventually the json model)
 delete_files_after_upload = False
 
-#True if you want to print as debug alla the queries
+# True if you want to print as debug all the queries
 print_queries = True
 
-# postgres superset db configurations
+# postgres superset db configurations 
 host="127.0.0.1"        # host 
 port=5432               # postgres port ( usually 5432 )
 user="superset"         # your username
@@ -30,6 +26,19 @@ password="superset"     # your password
 # when you create a new db in superset is only a logical entity. No real db correspond to the db created on superset
 target_db="examples"    # db on wich upload dataset (you must create the db in superset first) (if you don't have a target db leave it blank)
 superset_db="superset"  # the defalut superset db in wich superset store all metadata
+
+
+
+# INTERNAL CONFIGURATIONS
+
+
+
+
+# In this table superset will save a list of all the tables
+superset_tables_name = 'tables'
+
+# in this table superset will save a list of all the columns of all our tables
+superset_table_columns_name = 'table_columns'
 
 
 
@@ -58,7 +67,6 @@ def get_log_file():
 
 # IF YOU DON'T NEED A PARTICULAR CONFIGURATION FOR YOUR CSV SKIP THIS PART AND LEAVE AS IT IS
 # if you have to configure some particular columns for your csv edit the fields you need 
-# for example if you need a column that represent time ecc ...  
 
 # TABLES
 # this conf are for the table 'tables' in superset that describe the new created table for a specific dataset
