@@ -9,9 +9,6 @@ import time
 
 logging.basicConfig(filename=conf.get_log_file(), level=logging.INFO, format='%(asctime)s - %(levelname)s: %(message)s')
 
- # 'a' sta per 'append', crea il file se non esiste
-
-
 app = Flask('programmaticaly_upload_csv_in_superset')
 
 

@@ -151,16 +151,14 @@ class SupersetQueries:
                 insert_query = f'{insert_query} ('                   
                 for j, col in enumerate(row, start=1):              
                     # replacing ' with '', ' cause problesm to the query
-                    data_type_obj = self.infer_data_types(col)
-                    col = data_type_obj['data']
                     col = col.replace("'", "''")
-                    if (data_type_obj['postgres'] != self.postgres_types['int'] or data_type_obj['postgres'] != self.postgres_types['float']):
-                        col = data_type_obj['data']
-                        if (col == ''):
-                            col = 'NULL'  # if col is empty we must put NULL
-                        else:
-                            # if it's string, simply add quotes
-                            col = f"'{col}'"                      # if it's string, simply add quotes 
+                    try:        
+                        float(col)                                  # trying to convert in float, because if value is not a number must be escaped with -> ''
+                    except:
+                        if(col == ''):                              # if value is '' (empty string) 
+                            col = 'NULL'                            # must add NULL value or postgres return error
+                        else:                                       
+                            col = f"'{col}'"                        # if it's string, simply add quotes 
                     if(j == len(row)):
                         insert_query =  insert_query + col
                     else: insert_query = insert_query + col + ','   # add comma only if is not last element 
